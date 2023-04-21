@@ -14,20 +14,18 @@ productRouter.get('/', async (req, res) => {
 
     res.send(JSON.stringify(productos))
 })
-productRouter.get('/:pid', (req, res) => {
-    const productId = req.params.pid
-    const productos = JSON.parse(fs.readFileSync('productos.json'))
+productRouter.get('/:pid', async (req, res) => {
+    const product = await productManager.getProductById(req.params.id)
+    res.render('product', {
+        title: product.title,
+        description: product.description,
+        price: product.price,
+        code: product.code,
+        stock: product.stock
 
+    })
 
-    const producto = productos.find((p) => p.id === productId)
-
-    if (!producto) {
-
-        return res.status(404).json({ error: 'Producto no encontrado' });
-    }
-
-    res.json(producto)
-});
+})
 
 
 productRouter.post("/", async (req, res) => {
