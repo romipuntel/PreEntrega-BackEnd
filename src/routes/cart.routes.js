@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { CartManager } from "../CartManager.js";
 
-const cartManager = new CartManager('./info.txt')
+const cartManager = new CartManager('./cart.txt')
 
 const cartRouter = Router()
 
@@ -9,24 +9,21 @@ const cartRouter = Router()
 cartRouter.post('/', async (req, res) => {
     const nuevoCarrito = {
         id: CartManager.incrementarID(),
-        products: []
+        products: ""
     }
 
-    res.status(201).json(nuevoCarrito)
+    await cartManager.createCarrito({ nuevoCarrito })
+    res.send("Producto en carrito")
 })
 
 // Ruta para listar los productos de un carrito
-cartRouter.get('/:cid', async (req, res) => {
+cartRouter.get('/:id', async (req, res) => {
     const cart = await cartManager.getCartById(req.params.id)
-    const carrito = cart.find(c => c.id === Number(req.params.cid))
-    if (!carrito) {
-        res.status(404).json({ message: 'Carrito no encontrado' })
-    } else {
-        res.json(carrito.products)
-    }
+
+    res.send(cart)
 })
 
-cartRouter.post("/:cid/product/:pid'", async (req, res) => {
+cartRouter.post("/:id/product/:id'", async (req, res) => {
     const { id, quantity, idCart } = req.body
     await cartManager.addProductCart({ id, quantity, idCart })
     res.send("Producto agregado")
