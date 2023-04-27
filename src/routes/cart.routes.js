@@ -9,7 +9,7 @@ const cartRouter = Router()
 cartRouter.post('/', async (req, res) => {
     const nuevoCarrito = {
         id: CartManager.incrementarID(),
-        products: ""
+        products: []
     }
 
     await cartManager.createCarrito({ nuevoCarrito })
