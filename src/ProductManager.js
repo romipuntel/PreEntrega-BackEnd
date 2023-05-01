@@ -36,8 +36,13 @@ export class ProductManager {
 
 
     async getProducts() {
-        const product = await fs.readFile(this.path, 'utf-8')
-        return product
+
+        const data = await fs.readFile(this.path, 'utf-8')
+
+        const products = JSON.parse(data);
+
+        return products
+
     }
 
     async getProductById(id) {

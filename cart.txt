@@ -1,1 +1,1 @@
-[{"id":2,"cantidad":[]},{"id":4,"cantidad":[]},{"id":6,"cantidad":[]}]
+[]
