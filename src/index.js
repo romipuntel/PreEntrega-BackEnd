@@ -35,21 +35,22 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 const upload = multer({ storage: storage })
 
+
 //server Socket io
 const io = new Server(server, { cors: { origin: "", credentials: true } }) //{cors: {origin:""}}
-
+const mensaje = []
 
 io.on('connection', (socket) => {
     console.log("cliente conectado")
     socket.on('mensaje', info => {
         console.log(info)
-        // mensajes.push(info)
+        mensaje.push(info)
         //io.emit("mensajes", mensajes)
     })
+    socket.on("nuevoProducto", (prod) => {
+        console.log(prod)
+    })
 })
-
-
-//Handlebars
 
 app.use((req, res, next) => {
     req.io = io
@@ -68,8 +69,9 @@ app.post('/upload', upload.single('product'), (req, res,) => {
 
 })
 
-app.get('/realtime-products', (req, res, next) => {
-    res.render('realtimeproducts', { products: prodManager.getProducts() });
-    next();
 
-})
+//app.get('/realtimexxproducts', (req, res, next) => {
+    //res.render('realtimeproducts', { products: prodManager.getProducts() });
+    //next();
+
+//})

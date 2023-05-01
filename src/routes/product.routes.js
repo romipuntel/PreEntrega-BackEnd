@@ -27,7 +27,7 @@ productRouter.get('/:id', async (req, res) => {
 productRouter.get("/realtimeproducts", async (req, res) => {
     try {
         const productos = await productManager.getProducts()
-        //res.render('realtimeproducts', { productos })
+        res.render('realtimeproducts', { productos })
     } catch (error) {
         res.send(error)
     }
@@ -37,7 +37,7 @@ productRouter.get("/realtimeproducts", async (req, res) => {
 productRouter.post("/", async (req, res) => {
     const { title, description, price, thumbnail, code, stock } = req.body
     await productManager.addProduct({ title, description, price, thumbnail, code, stock })
-    io.emit("mensaje", "Hola")
+    io.emit("mensaje", "Hola") //no anda
     res.send("Producto creado")
 })
 
