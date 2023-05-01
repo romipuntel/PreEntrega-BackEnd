@@ -39,7 +39,7 @@ export class ProductManager {
 
         const data = await fs.readFile(this.path, 'utf-8')
 
-        const products = JSON.parse(data);
+        const products = JSON.parse(data)
 
         return products
 

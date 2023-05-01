@@ -71,4 +71,5 @@ app.post('/upload', upload.single('product'), (req, res,) => {
 app.get('/realtime-products', (req, res, next) => {
     res.render('realtimeproducts', { products: prodManager.getProducts() });
     next();
+
 })

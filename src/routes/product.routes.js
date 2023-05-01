@@ -16,8 +16,12 @@ productRouter.get('/', async (req, res) => {
 })
 productRouter.get('/:id', async (req, res) => {
     const product = await productManager.getProductById(req.params.id)
-
-    res.render(product)
+    res.render('product', {
+        title: product.title,
+        description: product.description,
+        price: product.price,
+        code: product.code,
+    })
 })
 
 productRouter.get("/realtimeproducts", async (req, res) => {
