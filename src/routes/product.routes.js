@@ -14,6 +14,15 @@ productRouter.get('/', async (req, res) => {
 
     res.send(JSON.stringify(productos))
 })
+
+productRouter.get("/realtimeproducts", async (req, res) => {
+    try {
+        const productos = await productManager.getProducts()
+        res.render('realTimeProduct', { productos })
+    } catch (error) {
+        res.send(error)
+    }
+})
 productRouter.get('/:id', async (req, res) => {
     const product = await productManager.getProductById(req.params.id)
     res.render('product', {
@@ -27,7 +36,7 @@ productRouter.get('/:id', async (req, res) => {
 productRouter.get("/realtimeproducts", async (req, res) => {
     try {
         const productos = await productManager.getProducts()
-        res.render('realtimeproducts', { productos })
+        res.render('realTimeProduct', { productos })
     } catch (error) {
         res.send(error)
     }
@@ -36,8 +45,8 @@ productRouter.get("/realtimeproducts", async (req, res) => {
 
 productRouter.post("/", async (req, res) => {
     const { title, description, price, thumbnail, code, stock } = req.body
-    await productManager.addProduct({ title, description, price, thumbnail, code, stock })
-    io.emit("mensaje", "Hola") //no anda
+    const product = await productManager.addProduct({ title, description, price, thumbnail, code, stock })
+    req.io.emit("nuevoProctucto", JSON.stringify(product))
     res.send("Producto creado")
 })
 
@@ -53,6 +62,7 @@ productRouter.put("/:id", async (req, res) => {
 productRouter.delete("/:id", async (req, res) => {
     const id = req.params.id
     const mensaje = await productManager.deleteProduct(id)
+    req.io.emit("eliminarProducto", id)
     res.send(mensaje)
 })
 

@@ -33,6 +33,7 @@ app.set('views', path.resolve(__dirname, './views'))
 //Middleware
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+app.use(express.static(path.resolve(__dirname, './public')))
 const upload = multer({ storage: storage })
 
 
@@ -43,9 +44,7 @@ const mensaje = []
 io.on('connection', (socket) => {
     console.log("cliente conectado")
     socket.on('mensaje', info => {
-        console.log(info)
-        mensaje.push(info)
-        //io.emit("mensajes", mensajes)
+        console.log(`Recibi mensaje ${info}`)
     })
     socket.on("nuevoProducto", (prod) => {
         console.log(prod)
@@ -60,7 +59,6 @@ app.use((req, res, next) => {
 
 //routes
 app.use('/product', productRouter)
-app.use('/product', express.static(__dirname + 'public'))
 app.use('/cart', cartRouter)
 app.post('/upload', upload.single('product'), (req, res,) => {
     console.log(req.body)
@@ -69,9 +67,3 @@ app.post('/upload', upload.single('product'), (req, res,) => {
 
 })
 
-
-//app.get('/realtimexxproducts', (req, res, next) => {
-    //res.render('realtimeproducts', { products: prodManager.getProducts() });
-    //next();
-
-//})
