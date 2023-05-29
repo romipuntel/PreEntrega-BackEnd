@@ -1,70 +1,50 @@
 import { Router } from "express";
-import { ProductManager } from "../ProductManager.js";
-
-const productManager = new ProductManager('./info.txt')
+import prodModel from "../models/Product.js"
 
 const productRouter = Router()
-
 productRouter.get('/', async (req, res) => {
-    const productos = await productManager.getProducts()
-    const limit = req.query.limit
-    if (limit) {
-        productos = productos.slice(0, limit)
-    }
-
-    res.send(JSON.stringify(productos))
-})
-
-productRouter.get("/realtimeproducts", async (req, res) => {
     try {
-        const productos = await productManager.getProducts()
-        res.render('realTimeProduct', { productos })
+        const { limit = 10, page = 1, sort, query } = req.query
+        const options = {}
+        options.limit = parseInt(limit)
+        options.skip = (parseInt(page) - 1) * parseInt(limit)
+
+        const queryOptions = query ? { title: { $regex: query, $options: "i" } } : {}
+        const totalCount = await prodModel.countDocuments(queryOptions)
+        const totalPages = Math.ceil(totalCount / limit)
+
+        // Calcular el número de elementos a saltar (skip) según la página solicitada
+        const skip = (page - 1) * limit;
+
+        // Construir la consulta de búsqueda con los parámetros proporcionados
+        let productosQuery = prodModel.find(queryOptions).skip(skip).limit(parseInt(limit, 10));
+
+        // Aplicar el ordenamiento si se proporciona el parámetro sort
+        if (sort === 'asc') {
+            productosQuery = productosQuery.sort({ precio: 1 }); // Orden ascendente por precio
+        } else if (sort === 'desc') {
+            productosQuery = productosQuery.sort({ precio: -1 }); // Orden descendente por precio
+        }
+
+        const productos = await productosQuery.exec();
+
+        const result = {
+            status: 'success',
+            payload: productos,
+            totalPages,
+            prevPage: page > 1 ? parseInt(page) - 1 : null,
+            nextPage: page < totalPages ? parent(page) + 1 : null,
+            page: parseInt(page),
+            hasPrevPage: page > 1,
+            hasNextPage: page < totalPages,
+            prevLink: page > 1 ? `http://localhost:4000/products?limit=${limit}&page=${parseInt(page) - 1}&sort=${sort}&query=${query}` : null,
+            nextLink: page < totalPages ? `http://localhost:4000/products?limit=${limit}&page=${parseIint(page) + 1}&sort=${sort}&query=${query}` : null
+        };
+
+        res.json(result);
     } catch (error) {
-        res.send(error)
+        res.status(500).json({ status: 'error', message: 'Error al obtener los productos' });
     }
-})
-productRouter.get('/:id', async (req, res) => {
-    const product = await productManager.getProductById(req.params.id)
-    res.render('product', {
-        title: product.title,
-        description: product.description,
-        price: product.price,
-        code: product.code,
-    })
-})
-
-productRouter.get("/realtimeproducts", async (req, res) => {
-    try {
-        const productos = await productManager.getProducts()
-        res.render('realTimeProduct', { productos })
-    } catch (error) {
-        res.send(error)
-    }
-})
-
-
-productRouter.post("/", async (req, res) => {
-    const { title, description, price, thumbnail, code, stock } = req.body
-    const product = await productManager.addProduct({ title, description, price, thumbnail, code, stock })
-    req.io.emit("nuevoProctucto", JSON.stringify(product))
-    res.send("Producto creado")
-})
-
-productRouter.put("/:id", async (req, res) => {
-    const id = req.params.id
-    const { title, description, price, thumbnail, code, stock } = req.body
-
-    const mensaje = await productManager.updateProduct(id, { title, description, price, thumbnail, code, stock })
-
-    res.send(mensaje)
-})
-
-productRouter.delete("/:id", async (req, res) => {
-    const id = req.params.id
-    const mensaje = await productManager.deleteProduct(id)
-    req.io.emit("eliminarProducto", id)
-    res.send(mensaje)
-})
-
+});
 
 export default productRouter
