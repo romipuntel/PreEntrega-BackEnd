@@ -6,4 +6,4 @@ const userRouter = Router()
 
 userRouter.post("/register", passport.authenticate("register"), createUser)
 
-export default userRouter
+export userRouter

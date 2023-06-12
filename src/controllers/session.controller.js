@@ -14,6 +14,7 @@ export const testLogin = (req, res, next) => {
      }
      */
 }
+
 export const destroySession = (req, res, next) => {
     if (req.session.login) {
         req.session.destroy(() => {
