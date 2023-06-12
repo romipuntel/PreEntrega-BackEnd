@@ -1,33 +1,44 @@
 import 'dotenv/config.js'
 import express from 'express'
-import mongoose from 'mongoose'
-import prodModel from "./models/Product.js"
-import cookieParser from 'cookie-parser'
 import session from 'express-session'
+import cookieParser from 'cookie-parser'
+import MongoStore from 'connect-mongo'
 import productRouter from './routes/product.routes.js'
 import cartRouter from "./routes/cart.routes.js"
+import routerSession from './routes/session.js'
+import userRouter from './routes/users.js'
 import multer from 'multer'
 import { __dirname, __filename } from './path.js'
+import passport from 'passport'
 import { engine } from 'express-handlebars'
 import * as path from 'path'
 import { Server } from 'socket.io'
+import mongoose from 'mongoose'
 
 //import { userModel } from './models/user.js' 
 
 
 const app = express()
-const PORT = 4000
-
 
 //Middleware
-//app.use(cookieParser(process.env.COOKIE))
+app.use(cookieParser(process.env.COOKIE))
 app.use(express.json())
-//app.use(session({
-
-//}))
 app.use(express.urlencoded({ extended: true }))
+app.use(session({
+    store: MongoStore.create({
+        mongoUrl: process.env.URL_MONGODB_ATLAS,
+        mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true },
+        ttl: 210
+    }),
+    secret: process.env.SESSION_SECRET,
+    resave: true,
+    saveUninitialized: true
+}))
+
 //app.use(express.static(path.resolve(__dirname, './public')))
 
+
+const PORT = 4000
 
 await mongoose.connect(process.env.URL_MONGODB_ATLAS)
     .then(() => console.log("DB is connected"))
@@ -40,10 +51,9 @@ app.set('view engine', 'handlebars')
 app.set('views', path.resolve(__dirname, './views'))
 
 //Crear cookie
-/*app.get('/setCookie', (req, res) => {
+app.get('/crearCookie', (req, res) => {
     //Nombre cookie - Valor asociado a dicha cookie
-    res.cookie('CookieCookie', "Esta es mi primer cookie")
-    res.send("cookie Creada")
+    res.cookie('CookieCookie', "Esta es mi primer cookie").send("cookie Creada")
 })
 
 //Consultar cookie
@@ -58,7 +68,6 @@ app.get('/getCookie', (req, res) => {
 app.get('/.deleteCookie', (req, res) => {
     res.clearCookie('cookieCookie').send("cookie Eliminada")
 })
-*/
 
 
 const storage = multer.diskStorage({
@@ -69,6 +78,8 @@ const storage = multer.diskStorage({
         cb(null, `${file.originalname}`)
     }
 })
+
+
 
 
 //Server
@@ -115,8 +126,15 @@ app.use((req, res, next) => {
 })
 
 
+//Config passport
+initializePassport()
+app.use(passport.initialize())
+app.use(passport.session())
+
+
 //routes
 app.use('/product', productRouter)
 app.use('/cart', cartRouter)
-
+app.use('/session', routerSession)
+app.use('/user', userRouter)
 
