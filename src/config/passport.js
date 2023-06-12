@@ -1,7 +1,7 @@
 import local from 'passport-local'
 import passport from 'passport'
-import { userModel } from '../models/Users.js'
-import { createHash, validatePassword } from '../utils/bcrypt.js'
+import { userModel } from '../models/User.js'
+import { createHash, validatePassword } from '../utilis/bcrypt.js'
 
 const LocalStrategy = local.Strategy
 
