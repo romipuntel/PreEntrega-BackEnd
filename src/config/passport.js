@@ -1,5 +1,6 @@
 import local from 'passport-local'
 import passport from 'passport'
+import { Strategy as GithubStrategy } from 'passport-github2'
 import { userModel } from '../models/User.js'
 import { createHash, validatePassword } from '../utilis/bcrypt.js'
 

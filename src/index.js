@@ -3,8 +3,8 @@ import express from 'express'
 import session from 'express-session'
 import cookieParser from 'cookie-parser'
 import MongoStore from 'connect-mongo'
-//import productRouter from './routes/product.routes.js'
-//import cartRouter from "./routes/cart.routes.js"
+import productRouter from './routes/product.routes.js'
+import cartRouter from "./routes/cart.routes.js"
 import routerSession from './routes/session.js'
 import userRouter from './routes/user.js'
 import multer from 'multer'
@@ -81,6 +81,12 @@ const storage = multer.diskStorage({
 
 const PORT = 4000
 
+//Server
+const server = app.listen(PORT, () => {
+    console.log(`Server on port ${PORT}`)
+})
+
+
 //server Socket io
 const io = new Server(server, { cors: { origin: "", credentials: true } })
 const mensaje = []
@@ -113,7 +119,3 @@ app.use('/cart', cartRouter)
 app.use('/session', routerSession)
 app.use('/user', userRouter)
 
-//Server
-const server = app.listen(PORT, () => {
-    console.log(`Server on port ${PORT}`)
-})
