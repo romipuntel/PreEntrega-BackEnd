@@ -1,5 +1,5 @@
 import local from 'passport-local'
-import passport from 'passport'
+import passport, { Passport } from 'passport'
 import { Strategy as GithubStrategy } from 'passport-github2'
 import { userModel } from '../models/User.js'
 import { createHash, validatePassword } from '../utilis/bcrypt.js'
@@ -34,6 +34,38 @@ const initializePassport = () => {
 
         }))
 
+
+    //GITHUB - Passport
+
+    passport.use(
+        'githubSignup',
+        new GithubStrategy(
+            {
+                clientID: 'Iv1.443eb40330da5cbe',
+                clientSecret: '4417e38c2fe5064898689af0bcc91bdf60387795',
+                callbackURL: 'http://localhost:4000/api/users/github',
+            },
+            async (accessToken, refreshToken, profile, done) => {
+                const { name, email } = profile._json
+                try {
+                    const userDB = await userModel.findOne({ email })
+                    if (userDB) {
+                        return done(null, userDB)
+                    }
+                    const user = {
+                        first_name: name.split(' ')[0],
+                        last_name: name.split(' ')[1] || '',
+                        email,
+                        password: ' ',
+                    }
+                    const newUserDB = await usersModel.create(user)
+                    done(null, newUserDB)
+                } catch (error) {
+                    done(error)
+                }
+            }
+        )
+    )
     //Configuracion de passport para sessiones
     //Inicializar la session del user
     passport.serializeUser((user, done) => {
@@ -67,4 +99,7 @@ const initializePassport = () => {
     }))
 
 }
+
+
+
 export default initializePassport

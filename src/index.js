@@ -6,6 +6,7 @@ import MongoStore from 'connect-mongo'
 import productRouter from './routes/product.routes.js'
 import cartRouter from "./routes/cart.routes.js"
 import routerSession from './routes/session.js'
+import viewsRouter from './routes/views.router.js'
 import userRouter from './routes/user.js'
 import multer from 'multer'
 import { __dirname, __filename } from './path.js'
@@ -114,8 +115,9 @@ app.use(passport.session())
 
 
 //routes
+app.use('/session', routerSession)
+app.use('/api/user', userRouter)
+app.use('/api/views', viewsRouter)
 app.use('/product', productRouter)
 app.use('/cart', cartRouter)
-app.use('/session', routerSession)
-app.use('/user', userRouter)
 
