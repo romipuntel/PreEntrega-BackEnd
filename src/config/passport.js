@@ -58,7 +58,7 @@ const initializePassport = () => {
                         email,
                         password: ' ',
                     }
-                    const newUserDB = await usersModel.create(user)
+                    const newUserDB = await userModel.create(user)
                     done(null, newUserDB)
                 } catch (error) {
                     done(error)
