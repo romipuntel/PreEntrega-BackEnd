@@ -1,5 +1,7 @@
-import 'dotenv/config.js'
+//import 'dotenv/config.js'
 import express from 'express'
+import config from './config/index.js'
+import './config/configDB'
 import session from 'express-session'
 import cookieParser from 'cookie-parser'
 import MongoStore from 'connect-mongo'
@@ -9,7 +11,7 @@ import routerSession from './routes/session.js'
 import viewsRouter from './routes/views.router.js'
 import userRouter from './routes/user.js'
 import multer from 'multer'
-import { __dirname, __filename } from './path.js'
+import { __dirname, __filename } from './utilis/path.js'
 import passport from 'passport'
 import initializePassport from './config/passport.js'
 import { engine } from 'express-handlebars'
@@ -20,6 +22,14 @@ import mongoose from 'mongoose'
 
 
 const app = express()
+
+const PORT = config.port
+
+//Server
+const server = app.listen(PORT, () => {
+    console.log(`Server on port ${PORT}`)
+})
+
 
 //Middleware
 app.use(cookieParser(process.env.COOKIE))
@@ -37,13 +47,6 @@ app.use(session({
 }))
 
 //app.use(express.static(path.resolve(__dirname, './public')))
-
-
-
-await mongoose.connect(process.env.URL_MONGODB_ATLAS)
-    .then(() => console.log("DB is connected"))
-    .catch((error) => console.log("Error en MongoDB atlas", error))
-
 
 //handlebars
 app.engine('handlebars', engine())
@@ -79,13 +82,6 @@ const storage = multer.diskStorage({
     }
 })
 
-
-const PORT = 4000
-
-//Server
-const server = app.listen(PORT, () => {
-    console.log(`Server on port ${PORT}`)
-})
 
 
 //server Socket io

@@ -10,6 +10,11 @@ const prodSchema = new Schema({
         type: String,
     },
 
+    price: {
+        type: Number,
+        required: true
+    },
+
     code: {
         type: String,
         required: true
