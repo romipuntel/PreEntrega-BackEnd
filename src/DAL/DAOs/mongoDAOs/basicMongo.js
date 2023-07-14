@@ -21,4 +21,24 @@ export default class BasicMongo {
             return error
         }
     }
+
+    async createOne(obj) {
+        try {
+            const response = await this.model.createOne(obj)
+            return response
+
+        } catch (error) {
+            return error
+        }
+    }
+
+    async deleteOne(id) {
+        try {
+            const response = await this.model.deleteOne(id)
+            return response
+
+        } catch (error) {
+            return error
+        }
+    }
 }

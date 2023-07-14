@@ -1,17 +1,17 @@
 //import 'dotenv/config.js'
 import express from 'express'
-import config from './config/index.js'
-import './config/configDB'
+import config from './config/indexConfig.js'
+import './config/configDB.js'
 import session from 'express-session'
 import cookieParser from 'cookie-parser'
 import MongoStore from 'connect-mongo'
+import messagesRouter from './routes/messeges.js'
 import productRouter from './routes/product.routes.js'
 import cartRouter from "./routes/cart.routes.js"
 import routerSession from './routes/session.js'
 import viewsRouter from './routes/views.router.js'
 import userRouter from './routes/user.js'
 import multer from 'multer'
-import { __dirname, __filename } from './utilis/path.js'
 import passport from 'passport'
 import initializePassport from './config/passport.js'
 import { engine } from 'express-handlebars'
@@ -26,7 +26,7 @@ const app = express()
 const PORT = config.port
 
 //Server
-const server = app.listen(PORT, () => {
+app.listen(PORT, () => {
     console.log(`Server on port ${PORT}`)
 })
 
@@ -45,7 +45,7 @@ app.use(session({
     resave: true,
     saveUninitialized: true
 }))
-
+app.use('/api/message', messagesRouter)
 //app.use(express.static(path.resolve(__dirname, './public')))
 
 //handlebars

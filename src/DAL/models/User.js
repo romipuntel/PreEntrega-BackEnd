@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import mongoose, { Schema, model } from "mongoose";
 
 
 
@@ -23,8 +23,16 @@ const userSchema = new Schema({
     password: {
         type: String,
         requiere: true
-    }
-});
+    },
+    orders:[
+        {
+            type: mongoose.SchemaType.ObjectId,
+            ref: 'Orders'
+        }
+    ]
+ 
+
+})
 
 
 

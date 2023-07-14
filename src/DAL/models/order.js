@@ -21,4 +21,4 @@ const ordersSchema = new mongoose.Schema({
     }
 })
 
-export const ordensModel = mongoose.moderl('orders', ordersSchema)
+export const ordersModel = mongoose.moderl('orders', ordersSchema)

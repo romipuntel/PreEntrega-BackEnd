@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { userModel } from '../models/User.js'
+import { userModel } from '../DAL/models/User.js'
 import { createUser } from '../controllers/user.controller.js'
 import passport from 'passport'
 

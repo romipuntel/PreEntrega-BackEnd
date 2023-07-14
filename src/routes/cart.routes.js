@@ -1,6 +1,6 @@
 import { Router } from "express";
-import cartModel from "../models/Cart.js"
-import prodModel from "../models/Product.js";
+import cartModel from "../DAL/models/Cart.js"
+import prodModel from "../DAL/models/Product.js";
 
 const cartRouter = Router()
 

@@ -1,7 +1,7 @@
 import local from 'passport-local'
 import passport, { Passport } from 'passport'
 import { Strategy as GithubStrategy } from 'passport-github2'
-import { userModel } from '../models/User.js'
+import { userModel } from '../DAL/models/User.js'
 import { createHash, validatePassword } from '../utilis/bcrypt.js'
 
 const LocalStrategy = local.Strategy
@@ -41,8 +41,8 @@ const initializePassport = () => {
         'githubSignup',
         new GithubStrategy(
             {
-                clientID: 'Iv1.443eb40330da5cbe',
-                clientSecret: '4417e38c2fe5064898689af0bcc91bdf60387795',
+                clientID: process.env.CLIENTE_ID,
+                clientSecret: process.env.CLIENTE_SECRET,
                 callbackURL: 'http://localhost:4000/api/users/github',
             },
             async (accessToken, refreshToken, profile, done) => {

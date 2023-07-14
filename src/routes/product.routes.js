@@ -1,5 +1,5 @@
 import { Router } from "express";
-import prodModel from "../models/Product.js"
+import prodModel from "../DAL/models/Product.js"
 
 const productRouter = Router()
 productRouter.get('/', async (req, res) => {
