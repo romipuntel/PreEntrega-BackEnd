@@ -14,6 +14,7 @@ import userRouter from './routes/user.js'
 import multer from 'multer'
 import passport from 'passport'
 import initializePassport from './config/passport.js'
+import { __dirname, __filename } from './path.js'
 import { engine } from 'express-handlebars'
 import * as path from 'path'
 import { Server } from 'socket.io'
@@ -51,7 +52,7 @@ app.use('/api/message', messagesRouter)
 //handlebars
 app.engine('handlebars', engine())
 app.set('view engine', 'handlebars')
-app.set('views', path.resolve(__dirname, './views'))
+pp.set('views', path.resolve(__dirname, './views'))
 
 //Crear cookie
 app.get('/crearCookie', (req, res) => {

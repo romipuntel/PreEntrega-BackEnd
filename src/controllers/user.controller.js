@@ -1,6 +1,6 @@
 import { UsersService } from "../services/user.services.js";
 
-class UserController {
+export class UserController {
     async findAllUsers(req, res) {
         try {
             const allUsers = await UsersService.findAllUsers()

@@ -1,7 +1,8 @@
 import { userMongo } from "../DAL/DAOs/mongoDAOs/userMongo.js";
+import { User } from '../DAL/DTO/user.js'
 import { createHash } from "../utilis/bcrypt.js"
 
-class UsersService {
+export class UsersService {
     async findAllUsers() {
         try {
             const response = await userMongo.findAll()
@@ -15,7 +16,8 @@ class UsersService {
     async findOneUser(id) {
         try {
             const response = await userMongo.findOneById(id)
-            return response
+            const user = new User(response)
+            return user.nameOnly()
 
         } catch (error) {
             return error
@@ -45,3 +47,5 @@ class UsersService {
         }
     }
 }
+
+export const usersService = new UsersService()

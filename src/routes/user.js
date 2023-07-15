@@ -1,11 +1,22 @@
 import { Router } from 'express'
-import { userModel } from '../DAL/models/User.js'
-import { createUser } from '../controllers/user.controller.js'
+import { UserController } from '../controllers/user.controller.js'
 import passport from 'passport'
 
-const userRouter = Router()
+const router = Router()
 
-userRouter.post("/register", passport.authenticate("register"), createUser)
+
+
+router.get('/', UserController.findAllUsers)
+router.get('/:idUser', UserController.findOneUser)
+router.post('/', UserController.createOneUser)
+router.delete('/:idUser', UserController.deleteOne)
+
+export default router
+
+
+
+
+/* userRouter.post("/register", passport.authenticate("register"), createUser)
 
 userRouter.get('/logout', (req, res) => {
     req.session.destroy((error) => {
@@ -57,5 +68,4 @@ userRouter.get('/github',
         // Successful authentication, redirect home.
         res.redirect('/api/views/profile')
     })
-
-export default userRouter
+*/
