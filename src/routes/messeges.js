@@ -1,8 +1,8 @@
 import { Router } from 'express'
 import { transporter } from '../utilis/nodemailer.js'
 import { __dirname } from '../config/indexConfig.js'
-//import { client } from '../utils/twilio.js'
-//import config from '../config/configDB.js'
+//import {  } from '../utils/twilio.js'
+import config from '../config/indexConfig.js'
 
 const router = Router()
 
@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
             subject: 'CORREO COTIZACION',
             //text: 'Probando segundo email'
             //html: '<h1>Promociones</h1>',
-            //attachments: [{ path: __dirname + '/cripto-expert.jpg' }]
+            attachments: [{ path: __dirname + '/cripto-expert.jpg' }]
         })
         res.status(200).send('Mail sent')
     } catch (error) {

@@ -1,15 +1,13 @@
 import { Router } from 'express'
-import { UserController } from '../controllers/user.controller.js'
+import { userController } from '../controllers/user.controller.js'
 import passport from 'passport'
 
 const router = Router()
 
-
-
-router.get('/', UserController.findAllUsers)
-router.get('/:idUser', UserController.findOneUser)
-router.post('/', UserController.createOneUser)
-router.delete('/:idUser', UserController.deleteOne)
+router.get('/', userController.findAllUsers)
+router.get('/:idUser', userController.findOneUser)
+router.post('/', userController.createOneUser)
+router.delete('/:idUser', userController.deleteOne)
 
 export default router
 

@@ -1,6 +1,6 @@
 import { UsersService } from "../services/user.services.js";
 
-export class UserController {
+class UserController {
     async findAllUsers(req, res) {
         try {
             const allUsers = await UsersService.findAllUsers()
@@ -10,10 +10,10 @@ export class UserController {
         }
     }
 
-    async findOneUsers(req, res) {
+    async findOneUser(req, res) {
         const { idUser } = req.params
         try {
-            const user = await UsersService.findOneUsers(id)
+            const user = await UsersService.findOneUser(id)
             res.status(200).json({ message: 'user', user })
         } catch (error) {
             res.status(500).json({ massage: 'error', error })
@@ -44,3 +44,4 @@ export class UserController {
         }
     }
 }
+export const userController = new UserController()

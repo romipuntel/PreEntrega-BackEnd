@@ -14,9 +14,9 @@ import userRouter from './routes/user.js'
 import multer from 'multer'
 import passport from 'passport'
 import initializePassport from './config/passport.js'
-import { __dirname, __filename } from './path.js'
-import { engine } from 'express-handlebars'
-import * as path from 'path'
+//import { __dirname } from './utilis/path.js'
+import handlebars from 'express-handlebars'
+//import * as path from 'path'
 import { Server } from 'socket.io'
 import mongoose from 'mongoose'
 
@@ -50,9 +50,10 @@ app.use('/api/message', messagesRouter)
 //app.use(express.static(path.resolve(__dirname, './public')))
 
 //handlebars
-app.engine('handlebars', engine())
+app.engine('handlebars', handlebars.engine())
+//app.set('views', __dirname + '/views')
 app.set('view engine', 'handlebars')
-pp.set('views', path.resolve(__dirname, './views'))
+//app.set('views', path.resolve(__dirname, './views'))
 
 //Crear cookie
 app.get('/crearCookie', (req, res) => {
@@ -90,7 +91,7 @@ const io = new Server(server, { cors: { origin: "", credentials: true } })
 const mensaje = []
 
 io.on('connection', (socket) => {
-    console.log("cliente conectado")
+    console.log("e conectado")
     socket.on('mensaje', info => {
         console.log(`Recibi mensaje ${info}`)
     })
@@ -117,4 +118,4 @@ app.use('/api/user', userRouter)
 app.use('/api/views', viewsRouter)
 app.use('/product', productRouter)
 app.use('/cart', cartRouter)
-
+app.use('/api/message', messagesRouter)
