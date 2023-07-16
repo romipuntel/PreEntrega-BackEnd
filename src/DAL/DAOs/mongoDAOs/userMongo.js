@@ -1,4 +1,4 @@
-import { userModel } from "../../models/user.js";
+import userModel from "../../models/user.model.js";
 import BasicMongo from "./basicMongo.js";
 
 class UserMongo extends BasicMongo {

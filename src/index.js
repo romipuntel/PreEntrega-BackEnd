@@ -1,4 +1,3 @@
-//import 'dotenv/config.js'
 import express from 'express'
 import config from './config/indexConfig.js'
 import './config/configDB.js'
@@ -8,15 +7,14 @@ import MongoStore from 'connect-mongo'
 import messagesRouter from './routes/messeges.js'
 import productRouter from './routes/product.routes.js'
 import cartRouter from "./routes/cart.routes.js"
-import routerSession from './routes/session.js'
+import routerSession from './routes/session.routes.js'
 import viewsRouter from './routes/views.router.js'
-import userRouter from './routes/user.js'
-import multer from 'multer'
+import userRouter from './routes/user.router.js'
 import passport from 'passport'
 import initializePassport from './config/passport.js'
 //import { __dirname } from './utilis/path.js'
 import handlebars from 'express-handlebars'
-//import * as path from 'path'
+
 import { Server } from 'socket.io'
 import mongoose from 'mongoose'
 
@@ -27,7 +25,7 @@ const app = express()
 const PORT = config.port
 
 //Server
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
     console.log(`Server on port ${PORT}`)
 })
 
@@ -73,17 +71,6 @@ app.get('/getCookie', (req, res) => {
 app.get('/.deleteCookie', (req, res) => {
     res.clearCookie('cookieCookie').send("cookie Eliminada")
 })
-
-
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'src/public/img')
-    },
-    filename: (req, file, cb) => {
-        cb(null, `${file.originalname}`)
-    }
-})
-
 
 
 //server Socket io

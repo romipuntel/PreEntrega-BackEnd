@@ -1,38 +1,43 @@
 import local from 'passport-local'
 import passport, { Passport } from 'passport'
 import { Strategy as GithubStrategy } from 'passport-github2'
-import { userModel } from '../DAL/models/User.js'
+import userModel from '../DAL/models/user.model.js'
 import { createHash, validatePassword } from '../utilis/bcrypt.js'
 
 const LocalStrategy = local.Strategy
 
 const initializePassport = () => {
 
-    passport.use('register', new LocalStrategy(
-        { passReqToCallback: true, usernameField: 'email' }, async (req, username, password, done) => {
-            const { first_name, last_name, email, gender } = req.body
-            try {
-                const user = await userModel.findOne({ email: email })
+    passport.use(
+        'register',
+        new LocalStrategy(
+            {
+                passReqToCallback: true, usernameField: 'email'
+            },
+            async (req, username, password, done) => {
+                const { first_name, last_name, email, gender } = req.body
+                try {
+                    const user = await userModel.findOne({ email: email })
 
-                if (user) {
-                    return done(null, false) //Usuario ya registrado, false no se creo ningun usuario
+                    if (user) {
+                        return done(null, false) //Usuario ya registrado, false no se creo ningun usuario
+                    }
+                    //Usuario no existe
+                    const passwordHash = createHash(password)
+                    const userCreated = await userModel.create({
+                        first_name: first_name,
+                        last_name: last_name,
+                        email: email,
+                        gender: gender,
+                        password: passwordHash
+                    })
+                    console.log(userCreated)
+                    return done(null, userCreated)
+                } catch (error) {
+                    return done(error)
                 }
-                //Usuario no existe
-                const passwordHash = createHash(password)
-                const userCreated = await userModel.create({
-                    first_name: first_name,
-                    last_name: last_name,
-                    email: email,
-                    gender: gender,
-                    password: passwordHash
-                })
-                console.log(userCreated)
-                return done(null, userCreated)
-            } catch (error) {
-                return done(error)
-            }
 
-        }))
+            }))
 
 
     //GITHUB - Passport

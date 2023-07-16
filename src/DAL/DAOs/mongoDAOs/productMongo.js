@@ -1,4 +1,4 @@
-import { prodModel } from "../../models/Product.js";
+import prodModel from "../../models/Product.js";
 import BasicMongo from "./basicMongo.js";
 
 class ProdMongo extends BasicMongo {
