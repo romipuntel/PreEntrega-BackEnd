@@ -8,3 +8,15 @@ export const transporter = nodemailer.createTransport({
         pass: config.gmail_password
     }
 })
+
+const sendMailTo = async (to, subject, text) => {
+    const mailOptions = {
+        from: process.env.gmail_user || "Tiendita",
+        to,
+        subject,
+        text,
+    };
+    return await transporter.sendMail(mailOptions);
+};
+
+export default sendMailTo;

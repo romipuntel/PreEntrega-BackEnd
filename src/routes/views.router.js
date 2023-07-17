@@ -3,6 +3,11 @@ import { Router } from "express";
 
 const userRouter = Router()
 
+
+userRouter.get('/', (req, res) => {
+    res.render('form')
+})
+
 userRouter.get('/', (req, res) => {
     res.render('login')
 })

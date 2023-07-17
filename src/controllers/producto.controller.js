@@ -1,4 +1,4 @@
-import productoServices, { ProdService } from "../services/producto.services.js";
+import ProductService from "../services/producto.services.js";
 
 class ProductoController {
     async getProducts(req, res) {
@@ -9,14 +9,14 @@ class ProductoController {
             options.skip = (parseInt(page) - 1) * parseInt(limit)
 
             const queryOptions = query ? { title: { $regex: query, $options: "i" } } : {}
-            const totalCount = await productoServices.countDocuments(queryOptions)
+            const totalCount = await ProductService.countDocuments(queryOptions)
             const totalPages = Math.ceil(totalCount / limit)
 
             // Calcular el número de elementos a saltar (skip) según la página solicitada
             const skip = (page - 1) * limit;
 
             // Construir la consulta de búsqueda con los parámetros proporcionados
-            let productosQuery = ProdService.find(queryOptions).skip(skip).limit(parseInt(limit, 10));
+            let productosQuery = ProductService.find(queryOptions).skip(skip).limit(parseInt(limit, 10));
 
             // Aplicar el ordenamiento si se proporciona el parámetro sort
             if (sort === 'asc') {

@@ -1,7 +1,7 @@
 import { prodMongo } from "../DAL/DAOs/mongoDAOs/productMongo.js";
 
 
-export class ProdService {
+export class ProductService {
     async getAllProducts() {
         try {
             const response = await prodMongo.findAll()
@@ -31,4 +31,4 @@ export class ProdService {
     }
 }
 
-export default new ProdService()
+export default new ProductService()
