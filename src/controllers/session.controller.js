@@ -1,19 +1,3 @@
-export const testLogin = (req, res, next) => {
-
-    /* const { email, password } = req.body
- 
-     try {
-         if (email == "adminid.com" && password == "1234") {
-             req.session.login = true
-             res.status(200).json({ message: "Usuario logueado" })
-         } else {
-             res.status(401).json({ message: "Usuario no logueado" })
-         }
-     } catch (error) {
-         res.status(500).json({ message: error.message })
-     }
-     */
-}
 
 export const destroySession = (req, res, next) => {
     if (req.session.login) {
@@ -30,3 +14,12 @@ export const getSession = (req, res, next) => {
         res.status(401).json({ message: "Session no activa" })
     }
 }
+
+
+export const login = (user, password) => {
+    if (!password) return 'No se ha proporcionado un password'
+    if (!user) return 'No se ha proporcionado un usuario'
+    if (password !== '123') return 'Password incorrecta'
+    if (user !== 'coderUser') return 'Credenciales incorrectas'
+    if (user === 'coderUser' && password === '123') return 'logueado'
+  }

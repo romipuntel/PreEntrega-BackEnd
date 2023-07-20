@@ -7,8 +7,8 @@ export class ProductService {
             const response = await prodMongo.findAll()
             return response
 
-        } catch (error) {
-            return error
+        } catch (err) {
+            throw new Error(err?.message)
         }
     }
 
@@ -17,8 +17,8 @@ export class ProductService {
             const response = await prodMongo.findOneById(product_id)
             return response
 
-        } catch (error) {
-            return error
+        } catch (err) {
+            throw new Error(err?.message)
         }
     }
 
@@ -29,6 +29,7 @@ export class ProductService {
             throw new Error(err?.message);
         }
     }
+
 }
 
 export default new ProductService()

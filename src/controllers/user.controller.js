@@ -1,6 +1,22 @@
 import { UsersService } from "../services/user.services.js";
+import logger from "../utilis/logger.js";
 
 class UserController {
+
+    async renderLoginView(req, res) {
+        try {
+            res.status(200);
+            logger.http(`${req.method} ${req.originalUrl} ${res.statusCode}`);
+            res.render("./pages/login.ejs");
+        } catch (err) {
+            res.status(500);
+            logger.error(`${req.method} ${req.originalUrl} ${res.statusCode}`);
+            res.render("./pages/error.ejs", {
+                code: 500,
+                message: "Internal Server Error",
+            })
+        }
+    }
     async findAllUsers(req, res) {
         try {
             const allUsers = await UsersService.findAllUsers()
@@ -44,4 +60,5 @@ class UserController {
         }
     }
 }
+
 export const userController = new UserController()

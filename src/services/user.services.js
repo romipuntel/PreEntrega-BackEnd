@@ -8,8 +8,8 @@ export class UsersService {
             const response = await userMongo.findAll()
             return response
 
-        } catch (error) {
-            return error
+        } catch (err) {
+            throw new Error(err?.message)
         }
     }
 
@@ -19,21 +19,41 @@ export class UsersService {
             const user = new User(response)
             return user.nameOnly()
 
-        } catch (error) {
-            return error
+        } catch (err) {
+            throw new Error(err?.message)
         }
     }
 
-    async createOneUser(user) {
-
+    async createUser(body, file) {
         try {
-            const hashPassword = createHash(user.password)
-            const newUser = { ...user, password: hashPassword }
-            const response = await userMongo.createOne(newUser)
-            return response
+            const { username, email, age, address, phone, password } = body;
+            const user = await this.getUserByUsername(username);
 
-        } catch (error) {
-            return error
+            if (user) {
+                return user; // Already exist a user with that username
+            }
+
+            if (!user) {
+                const hashedPassword = await bcrypt.hash(password, 8); // Encrypting the password
+                const userCart = await CartService.createCart({
+                    email: email,
+                    products: [],
+                    delivery_address: address,
+                }) // Create a cart for this user
+                const newUser = {
+                    first_name,
+                    last_name,
+                    email,
+                    gender,
+                    rol,
+                    password: hashedPassword,
+                    cart_id: userCart._id,
+
+                };
+                return await UserDAO.create(newUser);
+            }
+        } catch (err) {
+            throw new Error(err?.message);
         }
     }
 

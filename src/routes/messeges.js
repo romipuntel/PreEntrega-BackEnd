@@ -36,16 +36,5 @@ router.post('/', async (req, res) => {
     }
 })
 
-/*router.get('/twilio', async (req, res) => {
-    try {
-        await client.messages.create({
-            body: 'Primer sms de twilio',
-            to: '+5491166174142',
-            from: config.twilio_phone_number,
-        })
-    } catch (error) {
-        res.status(500).json({ message: error })
-    }
-})
-*/
+
 export default router

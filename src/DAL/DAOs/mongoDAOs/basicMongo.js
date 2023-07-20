@@ -1,10 +1,10 @@
 export default class BasicMongo {
-    constructor(model) {
-        this.model = model
+    constructor(modelo) {
+        this.modelo = modelo
     }
     async findAll() {
         try {
-            const response = await this.model.find()
+            const response = await this.modelo.find()
             return response
 
         } catch (error) {
@@ -14,7 +14,7 @@ export default class BasicMongo {
 
     async findOneById(id) {
         try {
-            const response = await this.model.findOneById(id)
+            const response = await this.modelo.findOneById(id)
             return response
 
         } catch (error) {
@@ -24,7 +24,7 @@ export default class BasicMongo {
 
     async createOne(obj) {
         try {
-            const response = await this.model.createOne(obj)
+            const response = await this.modelo.createOne(obj)
             return response
 
         } catch (error) {
@@ -34,7 +34,7 @@ export default class BasicMongo {
 
     async deleteOne(id) {
         try {
-            const response = await this.model.deleteOne(id)
+            const response = await this.modelo.deleteOne(id)
             return response
 
         } catch (error) {

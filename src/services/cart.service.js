@@ -7,15 +7,33 @@ export class CartService {
             return response
 
         } catch (error) {
-            return error
+            throw new Error(err?.message)
         }
     }
 
     async createCart(cart) {
         try {
-            return await cartMongo.create(cart);
+            return await cartMongo.create(cart)
         } catch (err) {
+            throw new Error(err?.message)
+        }
 
+    }
+    async createProductOfACart(cart_id, product) {
+        try {
+            let { products, total } = await this.getCartById(cart_id);
+            const productInCart = products.find((item) =>
+                item._id.equals(product._id)
+            );
+            total = total + product.price;
+            if (!productInCart) {
+                product.in_cart = 1;
+                return await CartDAO.createProductOfACart(cart_id, product, total);
+            }
+            product.in_cart = productInCart.in_cart + 1;
+            return await CartDAO.createProductOfACart(cart_id, product, total);
+        } catch (err) {
+            throw new Error(err?.message)
         }
     }
 
@@ -23,7 +41,7 @@ export class CartService {
         try {
             return await cartMongo.deleteCartById(cart_id);
         } catch (err) {
-
+            throw new Error(err?.message)
         }
     }
 
@@ -31,7 +49,7 @@ export class CartService {
         try {
             return await cartMongo.updateCart(cart_id, product_id);
         } catch (err) {
-
+            throw new Error(err?.message)
         }
     }
 }

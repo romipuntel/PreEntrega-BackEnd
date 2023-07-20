@@ -1,4 +1,6 @@
-import mongoose from "mongoose";
+import { model, Schema } from "mongoose";
+import { ProdSchema } from "./Product.js";
+
 
 
 const PurchaseDateSchema = new Schema({
@@ -9,30 +11,18 @@ const PurchaseDateSchema = new Schema({
 })
 
 
-const ordersSchema = new mongoose.Schema(
+const OrderSchema = new Schema(
     {
-        order_number: {
-            type: Number,
-            require: true
-        },
-
-        product: {
-            type: mongoose.SchemaType.objectId,
-            ref: "products"
-        },
-        buyer_email: {
-            type: String,
-            require: true
-        },
-        purchase_date: {
-            type: PurchaseDateSchema,
-            require: true
-        },
-        total: {
-            type: Number,
-            require: true
-        },
-    })
+        products: { type: [ProdSchema], require: true },
+        state: { type: String, require: true, default: "Generada" },
+        buyer_email: { type: String, require: true },
+        purchase_date: { type: PurchaseDateSchema, require: true },
+        total: { type: Number, require: true },
+    },
+    {
+        timestamps: true,
+    }
+);
 
 
-export const ordersModel = mongoose.model('orders', ordersSchema)
+export const ordersModel = model('order', OrderSchema)
