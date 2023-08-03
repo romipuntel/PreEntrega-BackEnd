@@ -1,6 +1,6 @@
 import winston from "winston";
 
-const levels = {
+const levelOptions = {
     error: 0,
     warn: 1,
     info: 2,
@@ -22,12 +22,12 @@ winston.addColors(colors);
 const format = winston.format.combine(
     winston.format.timestamp({ format: "DD-MM-YYYY HH:mm:ss" }),
     winston.format.colorize({ all: true }),
+    winston.format.printf(
+        (info) => ` ${info.level}: ${info.message}`
+    )
 
 )
 
-const level = () => {
-    return "debug";
-};
 
 const transports = [
     new winston.transports.Console(),
@@ -98,4 +98,4 @@ export const logger = winston.createLogger({
             )
         })
     ]
-});
+})

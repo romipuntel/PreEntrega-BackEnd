@@ -1,5 +1,5 @@
 import { UsersService } from "../services/user.services.js";
-import logger from "../utilis/logger.js";
+import { logger } from "../utilis/logger.js";
 
 class UserController {
 
