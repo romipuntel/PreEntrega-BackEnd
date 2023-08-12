@@ -1,13 +1,12 @@
 import index from "./src/index.js";
-import cluster from "node:cluster";
-import { cpus } from "node:os";
+import cluster from "cluster";
+import { cpus } from "os";
 import http from "node:http";
 import { Server as WebSocketServer } from "socket.io";
 import process from "node:process";
 import { logger } from "./utilis/logger.js ";
 import sockets from "./src/sockets.js";
 import "./src/config/db.js";
-
 const server = http.createServer(index)
 const io = new WebSocketServer(server)
 
@@ -23,6 +22,7 @@ const enableExpress = () => {
 
 const enableCluster = () => {
     const numCPUs = cpus().length
+    console.log(numCPUs)
 
     if (cluster.isPrimary) {
         logger.info(`Master ${process.pid} is running.`)

@@ -12,14 +12,13 @@ import viewsRouter from './routes/views.router.js'
 import userRouter from './routes/user.router.js'
 import passport from 'passport'
 import initializePassport from './config/passport.js'
-//import { __dirname } from './utilis/path.js'
+import { Path } from 'mongoose'
 import handlebars from 'express-handlebars'
 
 import { Server } from 'socket.io'
 import mongoose from 'mongoose'
 
-
-
+//const path = require("path")
 const app = express()
 
 const PORT = config.port
@@ -29,6 +28,25 @@ const server = app.listen(PORT, () => {
     console.log(`Server on port ${PORT}`)
 })
 
+// swagger
+const swaggerUI = require("swagger-ui-express")
+const swaggerJsDoc = require("swagger-jsdoc")
+const swaggerSpec = {
+    definition: {
+        openapi: '3.0.1',
+        info: {
+            title: 'Documentation of my eCommerce api',
+            description: 'This is the documentation of my api that I have developed for an ecommerce in the Coderhouse backend course.'
+        },
+        servers: [
+            {
+                url: "http://localhost:4000"
+            }
+        ]
+    },
+
+    apis: [`${path.join(__dirname, "./routes/*.js")}`]
+}
 
 //Middleware
 app.use(cookieParser(process.env.COOKIE))
@@ -44,6 +62,7 @@ app.use(session({
     resave: true,
     saveUninitialized: true
 }))
+app.use("/api-doc", swaggerUI.serve, swaggerUI.setup(swaggerJsDoc(swaggerSpec)))
 app.use('/api/message', messagesRouter)
 //app.use(express.static(path.resolve(__dirname, './public')))
 
@@ -78,7 +97,7 @@ const io = new Server(server, { cors: { origin: "", credentials: true } })
 const mensaje = []
 
 io.on('connection', (socket) => {
-    console.log("e conectado")
+    console.log("Se conectado")
     socket.on('mensaje', info => {
         console.log(`Recibi mensaje ${info}`)
     })
