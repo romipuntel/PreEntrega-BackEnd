@@ -12,9 +12,9 @@ import viewsRouter from './routes/views.router.js'
 import userRouter from './routes/user.router.js'
 import passport from 'passport'
 import initializePassport from './config/passport.js'
-import { Path } from 'mongoose'
 import handlebars from 'express-handlebars'
-
+import swaggerUi from 'swagger-ui-express';
+import { swaggerSetup } from './utilis/swagger.js'
 import { Server } from 'socket.io'
 import mongoose from 'mongoose'
 
@@ -28,25 +28,6 @@ const server = app.listen(PORT, () => {
     console.log(`Server on port ${PORT}`)
 })
 
-// swagger
-const swaggerUI = require("swagger-ui-express")
-const swaggerJsDoc = require("swagger-jsdoc")
-const swaggerSpec = {
-    definition: {
-        openapi: '3.0.1',
-        info: {
-            title: 'Documentation of my eCommerce api',
-            description: 'This is the documentation of my api that I have developed for an ecommerce in the Coderhouse backend course.'
-        },
-        servers: [
-            {
-                url: "http://localhost:4000"
-            }
-        ]
-    },
-
-    apis: [`${path.join(__dirname, "./routes/*.js")}`]
-}
 
 //Middleware
 app.use(cookieParser(process.env.COOKIE))
@@ -62,7 +43,9 @@ app.use(session({
     resave: true,
     saveUninitialized: true
 }))
-app.use("/api-doc", swaggerUI.serve, swaggerUI.setup(swaggerJsDoc(swaggerSpec)))
+// swagger documentation endpoint
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSetup))
+
 app.use('/api/message', messagesRouter)
 //app.use(express.static(path.resolve(__dirname, './public')))
 
